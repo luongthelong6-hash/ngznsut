@@ -20,6 +20,7 @@ body{
     align-items:center;
     justify-content:center;
     overflow:hidden;
+    position:relative;
 }
 
 /* Lớp phủ hồng mờ */
@@ -28,7 +29,7 @@ body::before{
     position:absolute;
     inset:0;
     background:rgba(255,192,203,0.4);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(6px);
     z-index:0;
 }
 
@@ -36,7 +37,7 @@ body::before{
 .card{
     position:relative;
     z-index:2;
-    background:rgba(255,240,245,0.95);
+    background:rgba(255,240,245,0.96);
     padding:40px 50px;
     border-radius:28px;
     box-shadow:0 20px 50px rgba(255,105,180,0.45);
@@ -54,48 +55,31 @@ body::before{
     color:#ff7aa2;
     font-size:17px;
 }
-.ball9 {
-  position: fixed;
-  top: -60px;
-  width: 40px;
-  height: 40px;
-  background-image: url("ball9.png");
-  background-size: cover;
-  pointer-events: none;
-  animation: fall linear infinite, spin linear infinite;
-  z-index: 3;
-  opacity: 0.9;
-}
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh);
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-/* Đồ bay */
-.fly{
-    position:absolute;
-    width:42px;
-    animation: float linear infinite;
+/* Bi số 9 rơi */
+.ball9{
+    position:fixed;
+    top:-60px;
+    background-image:url("ball9.png"); /* đặt file ball9.png cùng thư mục */
+    background-size:cover;
+    background-repeat:no-repeat;
+    pointer-events:none;
+    z-index:3;
     opacity:0.95;
+    animation:
+        fall linear forwards,
+        spin linear infinite;
 }
 
-.ball{
-    width:36px;
-}
-
-@keyframes float{
-    from{
-        transform: translateY(110vh) rotate(0deg);
-    }
+@keyframes fall{
     to{
-        transform: translateY(-140px) rotate(360deg);
+        transform: translateY(110vh);
+    }
+}
+
+@keyframes spin{
+    to{
+        transform: rotate(360deg);
     }
 }
 </style>
@@ -105,53 +89,32 @@ body::before{
 
 <div class="card">
     <h1>Ngân sứt 💕</h1>
-    <p>Hello Kitty 🎀 & bi a số 8 🎱 bay lượn dễ thương</p>
+    <p>Bi a số 9 🎱 rơi nhẹ dễ thương</p>
 </div>
+
 <script>
-  function createBall9() {
+function createBall9(){
     const ball = document.createElement("div");
     ball.className = "ball9";
 
-    ball.style.left = Math.random() * 100 + "vw";
-    ball.style.animationDuration =
-      6 + Math.random() * 6 + "s, " +
-      2 + Math.random() * 3 + "s";
+    const size = 28 + Math.random() * 22;
+    ball.style.width = size + "px";
+    ball.style.height = size + "px";
 
-    ball.style.width = ball.style.height =
-      30 + Math.random() * 20 + "px";
+    ball.style.left = Math.random() * 100 + "vw";
+
+    const fallTime = 6 + Math.random() * 6;
+    const spinTime = 2 + Math.random() * 3;
+    ball.style.animationDuration = fallTime + "s, " + spinTime + "s";
 
     document.body.appendChild(ball);
 
     setTimeout(() => {
-      ball.remove();
-    }, 12000);
-  }
-
-  setInterval(createBall9, 400);
-</script>
-<script>
-const kittyImg = "https://i.imgur.com/1Q9Z1Zm.png";   // Hello Kitty
-const ballImg  = "https://i.imgur.com/8QfQYQF.png";   // Bi a số 8
-
-for(let i=0;i<20;i++){
-    const kitty = document.createElement("img");
-    kitty.src = kittyImg;
-    kitty.className = "fly";
-    kitty.style.left = Math.random()*100 + "vw";
-    kitty.style.animationDuration = 6 + Math.random()*6 + "s";
-    kitty.style.animationDelay = Math.random()*5 + "s";
-    document.body.appendChild(kitty);
+        ball.remove();
+    }, fallTime * 1000);
 }
 
-for(let i=0;i<15;i++){
-    const ball = document.createElement("img");
-    ball.src = ballImg;
-    ball.className = "fly ball";
-    ball.style.left = Math.random()*100 + "vw";
-    ball.style.animationDuration = 5 + Math.random()*6 + "s";
-    ball.style.animationDelay = Math.random()*5 + "s";
-    document.body.appendChild(ball);
-}
+setInterval(createBall9, 350);
 </script>
 
 </body>
