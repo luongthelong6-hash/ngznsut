@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Ngân sứt 💕</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body{
+    height:100vh;
+    background:url("1.jpg") center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+/* Lớp phủ hồng mờ */
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(255,192,203,0.4);
+    backdrop-filter: blur(5px);
+    z-index:0;
+}
+
+/* Khung trung tâm */
+.card{
+    position:relative;
+    z-index:2;
+    background:rgba(255,240,245,0.95);
+    padding:40px 50px;
+    border-radius:28px;
+    box-shadow:0 20px 50px rgba(255,105,180,0.45);
+    text-align:center;
+    max-width:420px;
+}
+
+.card h1{
+    color:#ff4f87;
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+.card p{
+    color:#ff7aa2;
+    font-size:17px;
+}
+
+/* Đồ bay */
+.fly{
+    position:absolute;
+    width:42px;
+    animation: float linear infinite;
+    opacity:0.95;
+}
+
+.ball{
+    width:36px;
+}
+
+@keyframes float{
+    from{
+        transform: translateY(110vh) rotate(0deg);
+    }
+    to{
+        transform: translateY(-140px) rotate(360deg);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Ngân sứt 💕</h1>
+    <p>Hello Kitty 🎀 & bi a số 8 🎱 bay lượn dễ thương</p>
+</div>
+
+<script>
+const kittyImg = "https://i.imgur.com/1Q9Z1Zm.png";   // Hello Kitty
+const ballImg  = "https://i.imgur.com/8QfQYQF.png";   // Bi a số 8
+
+for(let i=0;i<20;i++){
+    const kitty = document.createElement("img");
+    kitty.src = kittyImg;
+    kitty.className = "fly";
+    kitty.style.left = Math.random()*100 + "vw";
+    kitty.style.animationDuration = 6 + Math.random()*6 + "s";
+    kitty.style.animationDelay = Math.random()*5 + "s";
+    document.body.appendChild(kitty);
+}
+
+for(let i=0;i<15;i++){
+    const ball = document.createElement("img");
+    ball.src = ballImg;
+    ball.className = "fly ball";
+    ball.style.left = Math.random()*100 + "vw";
+    ball.style.animationDuration = 5 + Math.random()*6 + "s";
+    ball.style.animationDelay = Math.random()*5 + "s";
+    document.body.appendChild(ball);
+}
+</script>
+
+</body>
+</html>
