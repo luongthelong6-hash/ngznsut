@@ -54,7 +54,30 @@ body::before{
     color:#ff7aa2;
     font-size:17px;
 }
+.ball9 {
+  position: fixed;
+  top: -60px;
+  width: 40px;
+  height: 40px;
+  background-image: url("ball9.png");
+  background-size: cover;
+  pointer-events: none;
+  animation: fall linear infinite, spin linear infinite;
+  z-index: 3;
+  opacity: 0.9;
+}
 
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 /* Đồ bay */
 .fly{
     position:absolute;
@@ -84,7 +107,28 @@ body::before{
     <h1>Ngân sứt 💕</h1>
     <p>Hello Kitty 🎀 & bi a số 8 🎱 bay lượn dễ thương</p>
 </div>
+<script>
+  function createBall9() {
+    const ball = document.createElement("div");
+    ball.className = "ball9";
 
+    ball.style.left = Math.random() * 100 + "vw";
+    ball.style.animationDuration =
+      6 + Math.random() * 6 + "s, " +
+      2 + Math.random() * 3 + "s";
+
+    ball.style.width = ball.style.height =
+      30 + Math.random() * 20 + "px";
+
+    document.body.appendChild(ball);
+
+    setTimeout(() => {
+      ball.remove();
+    }, 12000);
+  }
+
+  setInterval(createBall9, 400);
+</script>
 <script>
 const kittyImg = "https://i.imgur.com/1Q9Z1Zm.png";   // Hello Kitty
 const ballImg  = "https://i.imgur.com/8QfQYQF.png";   // Bi a số 8
