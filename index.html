@@ -2,119 +2,272 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Ngân sứt 💕</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitty Web</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: "Segoe UI", sans-serif;
+    font-family:'Poppins', sans-serif;
 }
 
 body{
     height:100vh;
-    background:url("1.jpg") center/cover no-repeat;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     overflow:hidden;
     position:relative;
+    background:#000;
 }
 
-/* Lớp phủ hồng mờ */
-body::before{
-    content:"";
+/* ======================
+   BACKGROUND
+====================== */
+
+.bg{
     position:absolute;
     inset:0;
-    background:rgba(255,192,203,0.4);
-    backdrop-filter: blur(6px);
-    z-index:0;
+    background:url('1.jpg') center/cover no-repeat;
+    animation:zoomBg 20s ease-in-out infinite alternate;
 }
 
-/* Khung trung tâm */
+/* Blur nghệ thuật rõ ~85% */
+.blur-layer{
+    position:absolute;
+    inset:0;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    mask-image: radial-gradient(circle at center,
+        transparent 0px,
+        transparent 320px,
+        rgba(0,0,0,0.4) 520px,
+        black 750px);
+    -webkit-mask-image: radial-gradient(circle at center,
+        transparent 0px,
+        transparent 320px,
+        rgba(0,0,0,0.4) 520px,
+        black 750px);
+}
+
+/* Overlay nhẹ */
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(255,182,193,0.18);
+}
+
+/* ======================
+   CARD
+====================== */
+
 .card{
     position:relative;
-    z-index:2;
-    background:rgba(255,240,245,0.96);
-    padding:40px 50px;
-    border-radius:28px;
-    box-shadow:0 20px 50px rgba(255,105,180,0.45);
+    z-index:5;
+    width:90%;
+    max-width:700px;
+    padding:60px 40px;
     text-align:center;
-    max-width:420px;
+    background:rgba(255,255,255,0.9);
+    border-radius:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.25);
+    border:2px solid #ffb6c1;
 }
 
 .card h1{
-    color:#ff4f87;
+    color:#ff4d88;
     font-size:30px;
-    margin-bottom:12px;
+    margin-bottom:20px;
 }
 
 .card p{
-    color:#ff7aa2;
-    font-size:17px;
+    color:#ff3366;
+    font-size:18px;
+    font-weight:500;
 }
 
-/* Bi số 9 rơi */
-.ball9{
-    position:fixed;
-    top:-60px;
-    background-image:url("ball9.png"); /* đặt file ball9.png cùng thư mục */
-    background-size:cover;
-    background-repeat:no-repeat;
+/* Text animation */
+#dynamicText{
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-out{
+    opacity:0;
+    transform:translateY(10px);
+}
+
+.fade-in{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* ======================
+   BALL SYSTEM
+====================== */
+
+.ball{
+    position:absolute;
+    pointer-events:auto;
+    cursor:pointer;
+    z-index:4;
+}
+
+.particle{
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:#ff4d88;
+    border-radius:50%;
     pointer-events:none;
-    z-index:3;
-    opacity:0.95;
-    animation:
-        fall linear forwards,
-        spin linear infinite;
 }
 
-@keyframes fall{
-    to{
-        transform: translateY(110vh);
-    }
-}
-
-@keyframes spin{
-    to{
-        transform: rotate(360deg);
-    }
+/* Zoom animation */
+@keyframes zoomBg{
+    from{ transform:scale(1); }
+    to{ transform:scale(1.05); }
 }
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
+<div class="blur-layer"></div>
+<div class="overlay"></div>
+
 <div class="card">
-    <h1>Ngân sứt 💕</h1>
-    <p>Bi a số 9 🎱 rơi nhẹ dễ thương</p>
+    <h1>Thế giới Hello Kitty - bởi NganPT</h1>
+    <p id="dynamicText">Về nhà nấu cơm rồi rửa bát đi 😌</p>
 </div>
 
 <script>
-function createBall9(){
-    const ball = document.createElement("div");
-    ball.className = "ball9";
 
-    const size = 28 + Math.random() * 22;
-    ball.style.width = size + "px";
-    ball.style.height = size + "px";
+/* ======================
+   TEXT AUTO CHANGE
+====================== */
 
-    ball.style.left = Math.random() * 100 + "vw";
+const texts = [
+    "Về nhà nấu cơm rồi rửa bát đi 😌",
+    "Đừng gặp ny nữa 😏",
+];
 
-    const fallTime = 6 + Math.random() * 6;
-    const spinTime = 2 + Math.random() * 3;
-    ball.style.animationDuration = fallTime + "s, " + spinTime + "s";
+let index = 0;
+const textElement = document.getElementById("dynamicText");
 
-    document.body.appendChild(ball);
+setInterval(() => {
+    textElement.classList.add("fade-out");
 
     setTimeout(() => {
-        ball.remove();
-    }, fallTime * 1000);
+        index = (index + 1) % texts.length;
+        textElement.textContent = texts[index];
+        textElement.classList.remove("fade-out");
+        textElement.classList.add("fade-in");
+    }, 600);
+
+}, 3000);
+
+
+/* ======================
+   BALL PHYSICS
+====================== */
+
+const gravity = 0.5;
+const bounce = 0.8;
+const balls = [];
+
+function createBall(){
+    const ball = document.createElement("img");
+    ball.src = "ball9.png";
+    ball.classList.add("ball");
+
+    const size = 40 + Math.random()*30;
+    ball.style.width = size + "px";
+
+    const obj = {
+        el: ball,
+        x: Math.random() * window.innerWidth,
+        y: -100,
+        vx: (Math.random()-0.5)*4,
+        vy: 0,
+        size: size,
+        rotation: 0,
+        vr: (Math.random()-0.5)*10
+    };
+
+    ball.style.left = obj.x + "px";
+    ball.style.top = obj.y + "px";
+
+    ball.addEventListener("click", () => explode(obj));
+
+    document.body.appendChild(ball);
+    balls.push(obj);
 }
 
-setInterval(createBall9, 350);
+function explode(ballObj){
+    for(let i=0;i<15;i++){
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+
+        particle.style.left = ballObj.x + "px";
+        particle.style.top = ballObj.y + "px";
+
+        document.body.appendChild(particle);
+
+        const angle = Math.random()*2*Math.PI;
+        const speed = 3 + Math.random()*4;
+
+        const vx = Math.cos(angle)*speed;
+        const vy = Math.sin(angle)*speed;
+
+        let life = 60;
+
+        function animate(){
+            if(life<=0){
+                particle.remove();
+                return;
+            }
+            particle.style.left = parseFloat(particle.style.left) + vx + "px";
+            particle.style.top = parseFloat(particle.style.top) + vy + "px";
+            particle.style.opacity = life/60;
+            life--;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }
+
+    ballObj.el.remove();
+    balls.splice(balls.indexOf(ballObj),1);
+}
+
+function update(){
+    balls.forEach(obj=>{
+        obj.vy += gravity;
+        obj.x += obj.vx;
+        obj.y += obj.vy;
+        obj.rotation += obj.vr;
+
+        if(obj.y + obj.size >= window.innerHeight){
+            obj.y = window.innerHeight - obj.size;
+            obj.vy *= -bounce;
+        }
+
+        obj.el.style.left = obj.x + "px";
+        obj.el.style.top = obj.y + "px";
+        obj.el.style.transform = `rotate(${obj.rotation}deg)`;
+    });
+
+    requestAnimationFrame(update);
+}
+
+setInterval(createBall, 1200);
+update();
+
 </script>
 
 </body>
